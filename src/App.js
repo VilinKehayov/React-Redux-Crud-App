@@ -1,7 +1,7 @@
 import "./App.css";
 import { useSelector, useDispatch } from "react-redux";
-import {addUser} from "./features/Users.js"
-import {useState} from "react";
+import { addUser, deleteUser } from "./features/Users.js";
+import { useState } from "react";
 
 function App() {
   const dispatch = useDispatch();
@@ -13,9 +13,33 @@ function App() {
     <div className="App">
       {""}
       <div className="addUser">
-        <input type="text" placeholder="Name..." />
-        <input type="text" placeholder="Username..." />
-        <button onClick={()=>{dispatch(addUser({id:0, name:"", username:""}))}}>Add User</button>
+        <input
+          type="text"
+          placeholder="Name..."
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
+        />
+        <input
+          type="text"
+          placeholder="Username..."
+          onChange={(event) => {
+            setUsername(event.target.value);
+          }}
+        />
+        <button
+          onClick={() => {
+            dispatch(
+              addUser({
+                id: userList[userList.length - 1].id + 1,
+                name,
+                username,
+              })
+            );
+          }}
+        >
+          Add User
+        </button>
       </div>
       <div className="displayUsers">
         {userList.map((user) => {
@@ -23,6 +47,9 @@ function App() {
             <div>
               <h1>{user.name}</h1>
               <h1>{user.username}</h1>
+              <input type="text" placeholder="New username..." />
+              <button>Update Username</button>
+              <button onClick={()=>{dispatch(deleteUser({id: user.id}))}}>Delete User</button>
             </div>
           );
         })}
